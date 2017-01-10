@@ -8,15 +8,15 @@ var direction=1;
 var actor_x=50;
 var actor_y=50;
 var Game={};
-mouse_x = 0;
-mouse_y = 0;
+var mouse_x = 0;
+var mouse_y = 0;
+var KeyFlags={
+    left:false,
+    right:false,
+    up:false,
+    down:false
+};
 
-function keyReset() {
- this.key.left=false;
- this.key.right=false;
- this.key.up=false;
- this.key.down=false;
-}
 
 
 canvas.addEventListener('mousemove', function(evt) {
@@ -26,18 +26,27 @@ canvas.addEventListener('mousemove', function(evt) {
 },false);
 window.addEventListener('keydown', function (evt) {
     switch (evt.keyCode){
-        case 37: this.key.left=true; break;
-        case 38: this.key.up=true; break;
-        case 39: this.key.right=true; break;
-        case 40: this.key.down=true; break;
+        case 37: KeyFlags.left=true; break;
+        case 38: KeyFlags.up=true; break;
+        case 39: KeyFlags.right=true; break;
+        case 40: KeyFlags.down=true; break;
+    }
+});
+
+window.addEventListener('keyup', function (evt) {
+    switch (evt.keyCode){
+        case 37: KeyFlags.left=false; break;
+        case 38: KeyFlags.up=false; break;
+        case 39: KeyFlags.right=false; break;
+        case 40: KeyFlags.down=false; break;
     }
 });
 Game.update= function() {
     // if (Math.abs(arcstart)<2*Pi){
     //     arcstart-=2*Pi*direction;
     // }
-    arcstart=Math.atan2(mouse_y-50,mouse_x-50)+(Pi/2);
-    keyReset();
+    arcstart=Math.atan2(mouse_y-actor_y,mouse_x-actor_x)+(Pi/2);
+    move();
 };
 Game.fps = 30;
 Game.draw= function () {
@@ -68,10 +77,10 @@ function getMousePos(canvas, evt) {
 }
 
 function move(){
-    if (this.key.right==true) { actor_x+=1;}
-    if (this.key.left==true) { actor_x-=1;}
-    if (this.key.up==true) { actor_y-=1;}
-    if (this.key.down==true) { actor_y+=1;}
+    if (KeyFlags.right==true) { actor_x+=1;}
+    if (KeyFlags.left==true) { actor_x-=1;}
+    if (KeyFlags.up==true) { actor_y-=1;}
+    if (KeyFlags.down==true) { actor_y+=1;}
 }
 
 function colorChange(){
